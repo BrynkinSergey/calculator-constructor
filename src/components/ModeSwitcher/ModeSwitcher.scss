@@ -1,0 +1,20 @@
+@import 'src/styles/variables';
+@import 'src/components/ModeSwitcher/components/ModeSwitcherButton/ModeSwitcherButton';
+
+.mode-switcher {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 38px;
+  width: 240px;
+  background-color: $light-light-gray;
+  border-radius: 6px;
+
+  &__runtime-button {
+    @include mode-switcher__button(108px)
+  }
+
+  &__constructor-button {
+    @include mode-switcher__button(130px)
+  }
+}

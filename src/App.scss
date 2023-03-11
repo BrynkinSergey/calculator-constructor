@@ -1,0 +1,40 @@
+.app {
+  height: 520px;
+  width: 540px;
+  background-color: aqua;
+
+  &__header {
+    width: 100%;
+    height: 40px;
+    background-color: #FFFFFF;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__content {
+    width: 100%;
+    height: 500px;
+    background-color: green;
+  }
+}
+
+.calculator-constructor {
+  width: 540px;
+  height: 500px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  &__building-blocks {
+    height: 100%;
+    width: 240px;
+    background-color: aqua;
+  }
+
+  &__constructor-field {
+    height: 100%;
+    width: 240px;
+    background-color: yellow;
+  }
+}
+

@@ -1,0 +1,27 @@
+@import 'src/styles/variables';
+
+@mixin mode-switcher__button($width) {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10.5px 12px;
+  height: 36px;
+  width: $width;
+  border-radius: 5px;
+  border-width: 0;
+  background-color: $white;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  color: $dark-gray;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: $light-light-gray;
+  }
+}
+
+.image-wrapper {
+  height: 20px;
+  width: 20px;
+}
