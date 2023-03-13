@@ -5,7 +5,7 @@ import {Display} from "./components/Display";
 import {CalculatorButton} from "./components/CalculatorButton";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../../redux/store";
-import {addDigit, calculate, setOperation} from "../../../../redux/calculatorSlice";
+import {addDigit, calculate, setDecimalPoint, setOperation} from "../../../../redux/calculatorSlice";
 import {digits, operations} from "../../../../constants/constants";
 
 interface WidgetProps {
@@ -40,10 +40,6 @@ export const Widget = ({
         onDoubleClick(widgetType)
     }
 
-    const handleClick = (value: string) => {
-        console.log(value)
-    }
-
     const handleClickDigit = (value: string) => {
         if (mode === 'constructor') return
         const digit = +value;
@@ -58,6 +54,11 @@ export const Widget = ({
     const handleClickEqual = () => {
         if (mode === 'constructor') return
         dispatch(calculate())
+    }
+
+    const handleClickColon = () => {
+        if (mode === 'constructor') return
+        dispatch(setDecimalPoint())
     }
 
     const getDisplayValue = () => {
@@ -75,7 +76,7 @@ export const Widget = ({
 
     switch (widgetType) {
         case "display":
-            WidgetContent = <Display value={getDisplayValue()}/>
+            WidgetContent = <Display value={getDisplayValue().toString()}/>
             break;
 
         case "operations":
@@ -91,7 +92,8 @@ export const Widget = ({
                 {digits.map((digit, index) => {
                     let width = 72;
                     if (digit === '0') width = 152
-                    return <CalculatorButton handleOnClick={handleClickDigit} key={`digit-button-${index}`}
+                    return <CalculatorButton handleOnClick={digit === ',' ? handleClickColon : handleClickDigit}
+                                             key={`digit-button-${index}`}
                                              buttonType={'standard'} value={digit}
                                              height={48} width={width}/>
                 })}

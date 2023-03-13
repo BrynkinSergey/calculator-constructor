@@ -5,9 +5,9 @@ import {widgets} from "../constants/constants";
 interface CalculatorState {
     mode: 'runtime' | 'constructor';
     availableWidgets: WidgetType[];
-    firstDigit: number;
-    secondDigit: number;
-    result: number;
+    firstDigit: string;
+    secondDigit: string;
+    result: string;
     displayState: DisplayStatesType;
     currentOperation: OperationsType;
 }
@@ -16,9 +16,9 @@ interface CalculatorState {
 const initialState: CalculatorState = {
     mode: 'constructor',
     availableWidgets: [...widgets],
-    firstDigit: 0,
-    secondDigit: 0,
-    result: 0,
+    firstDigit: '',
+    secondDigit: '',
+    result: '',
     displayState: 'showFirstDigit',
     currentOperation: null,
 }
@@ -40,39 +40,59 @@ export const calculatorSlice = createSlice({
             if (index > -1) state.availableWidgets.splice(index, 1);
         },
         addDigit: (state, action: PayloadAction<{ digit: number }>) => {
+            if (state.displayState === 'showResult') state.displayState = 'showFirstDigit';
+            if (state.currentOperation) state.displayState = 'showSecondDigit';
             const {digit} = action.payload;
-            console.log(digit)
             const {displayState, firstDigit, secondDigit} = state
             if (displayState === 'showSecondDigit') {
-                state.secondDigit = secondDigit * 10 + digit;
+                state.secondDigit = (secondDigit + digit).toString();
             } else {
-                state.firstDigit = firstDigit * 10 + digit;
+                state.firstDigit = (firstDigit + digit).toString();
             }
         },
         setOperation: (state, action: PayloadAction<{ operation: OperationsType }>) => {
+            if (state.displayState === 'showResult') state.firstDigit = state.result;
             state.currentOperation = action.payload.operation;
-            state.displayState = 'showSecondDigit';
         },
         calculate: (state) => {
             const {currentOperation, firstDigit, secondDigit} = state
             switch (currentOperation) {
                 case '+':
-                    state.result = firstDigit + secondDigit;
+                    state.result = (+firstDigit + +secondDigit).toString();
                     break;
                 case '-':
-                    state.result = firstDigit - secondDigit;
+                    state.result = (+firstDigit - +secondDigit).toString();
                     break;
                 case 'x':
-                    state.result = firstDigit * secondDigit;
+                    state.result = (+firstDigit * +secondDigit).toString();
                     break;
                 case '/':
-                    state.result = firstDigit / secondDigit;
+                    state.result = (+firstDigit / +secondDigit).toString();
                     break;
             }
-            state.firstDigit = 0;
-            state.secondDigit = 0;
+            state.result = state.result.length > 9 ? (+state.result).toFixed(9 - state.result.toString().split('.')[0].length) : state.result
+            if (!Number.isFinite(+state.result)) state.result = 'Не определено';
+            state.firstDigit = '';
+            state.secondDigit = '';
             state.currentOperation = null;
             state.displayState = 'showResult'
+        },
+        setDecimalPoint: (state) => {
+            if (state.displayState === 'showResult') state.displayState = 'showFirstDigit';
+            if (state.displayState === 'showFirstDigit') {
+                if (!state.firstDigit) {
+                    state.firstDigit = '0.'
+                } else {
+                    state.firstDigit = state.firstDigit + '.'
+                }
+            }
+            if (state.displayState === 'showSecondDigit') {
+                if (!state.secondDigit) {
+                    state.secondDigit = '0.'
+                } else {
+                    state.secondDigit = state.secondDigit + '.'
+                }
+            }
         }
 
     },
@@ -84,7 +104,8 @@ export const {
     removeAvailableWidget,
     addDigit,
     setOperation,
-    calculate
+    calculate,
+    setDecimalPoint
 } = calculatorSlice.actions
 
 export default calculatorSlice.reducer
