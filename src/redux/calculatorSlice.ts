@@ -29,6 +29,11 @@ export const calculatorSlice = createSlice({
     reducers: {
         switchMode: (state) => {
             state.mode = state.mode === 'runtime' ? 'constructor' : 'runtime';
+            state.firstDigit = '';
+            state.secondDigit = '';
+            state.result = '';
+            state.displayState = 'showFirstDigit';
+            state.currentOperation = null;
         },
         addAvailableWidget: (state, action) => {
             const index = state.availableWidgets.indexOf(action.payload);
