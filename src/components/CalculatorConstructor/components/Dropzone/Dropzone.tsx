@@ -11,7 +11,7 @@ import {WIDGET_CLASS} from "./Dropzone.consts";
 export const Dropzone = () => {
     const [isDragging, setIsDragging] = useState(false)
     const [dropHoveredWidget, setDropHoveredWidget] = useState<WidgetType | 'dropzone' | null>(null)
-    const {widgets, addWidget, removeWidget} = useWidgets()
+    const {widgets, addWidget, removeWidget, replaceWidget} = useWidgets()
     const dispatch = useDispatch();
 
     const handleDoubleClick = (widget: WidgetType) => {
@@ -21,17 +21,23 @@ export const Dropzone = () => {
 
     const handleOnDrop = (event: React.DragEvent) => {
         const target = event.target as HTMLDivElement;
-        const widgetType = event.dataTransfer.getData('widgetType') as WidgetType;
+        const widget = event.dataTransfer.getData('widgetType') as WidgetType;
 
         if (target.closest(`.${WIDGET_CLASS}`)?.className.includes(WIDGET_CLASS)) {
-            const nextWidgetType = target.closest(`.${WIDGET_CLASS}`)?.className.split(' ')[1].split('-')[0] as WidgetType;
-            if (!widgets.includes(widgetType)) addWidget(widgetType, nextWidgetType);
+            const nextWidget = target.closest(`.${WIDGET_CLASS}`)?.className.split(' ')[1].split('-')[0] as WidgetType;
+            if (widgets.includes(widget)) {
+                replaceWidget(widget, nextWidget)
+            } else {
+                addWidget(widget, nextWidget);
+            }
         } else {
-            if (!widgets.includes(widgetType)) addWidget(widgetType);
+            if (widgets.includes(widget)) {
+                replaceWidget(widget)
+            } else addWidget(widget);
         }
 
         setDropHoveredWidget(null)
-        dispatch(removeAvailableWidget(widgetType))
+        dispatch(removeAvailableWidget(widget))
         setIsDragging(false)
     }
 
@@ -43,13 +49,11 @@ export const Dropzone = () => {
         if (target.closest(`.${WIDGET_CLASS}`)?.className.includes(WIDGET_CLASS)) {
             const nextWidgetType = target.closest(`.${WIDGET_CLASS}`)?.className.split(' ')[1].split('-')[0] as WidgetType;
             if (!widgets.includes(widgetType)) {
-                console.log(nextWidgetType)
                 setDropHoveredWidget(nextWidgetType)
             }
         } else {
 
             if (!widgets.includes(widgetType)) {
-                console.log('dropzone');
                 setDropHoveredWidget('dropzone')
             }
         }
