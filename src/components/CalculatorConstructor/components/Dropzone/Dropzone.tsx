@@ -3,20 +3,24 @@ import React, {useState} from "react";
 import {ReactComponent as ImageIcon} from "./images/image-icon.svg";
 import {Widget} from "../Widget";
 import {WidgetDropHoverType, WidgetType} from "../../../../constants/types";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {addAvailableWidget, removeAvailableWidget} from "../../../../redux/calculatorSlice";
 import {useWidgets} from "../../../../hooks/useWidgets";
 import {WIDGET_CLASS} from "./Dropzone.consts";
+import {RootState} from "../../../../redux/store";
 
 export const Dropzone = () => {
     const [isDragging, setIsDragging] = useState(false)
     const [dropHoveredWidget, setDropHoveredWidget] = useState<WidgetType | 'dropzone' | null>(null)
     const {widgets, addWidget, removeWidget, replaceWidget} = useWidgets()
+    const mode = useSelector((state: RootState) => state.calculator.mode)
     const dispatch = useDispatch();
 
     const handleDoubleClick = (widget: WidgetType) => {
-        removeWidget(widget)
-        dispatch(addAvailableWidget(widget))
+        if (mode === 'constructor') {
+            removeWidget(widget)
+            dispatch(addAvailableWidget(widget))
+        }
     }
 
     const handleOnDrop = (event: React.DragEvent) => {
