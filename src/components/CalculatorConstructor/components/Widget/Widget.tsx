@@ -3,6 +3,8 @@ import {WidgetDropHoverType, WidgetType} from "../../../../constants/types";
 import React from "react";
 import {Display} from "./components/Display";
 import {CalculatorButton} from "./components/CalculatorButton";
+import {useSelector} from "react-redux";
+import {RootState} from "../../../../redux/store";
 
 interface WidgetProps {
     dropHover?: WidgetDropHoverType;
@@ -22,6 +24,8 @@ export const Widget = ({
                        }: WidgetProps) => {
     const operations = ['/', 'x', '-', '+'];
     const digits = ['7', '8', '9', '4', '5', '6', '1', '2', '3', '0', ','];
+
+    const mode = useSelector((state: RootState) => state.calculator.mode)
 
     const handleOnDrag = (event: React.DragEvent, widgetType: WidgetType) => {
         event.dataTransfer.setData('widgetType', widgetType);
@@ -73,7 +77,7 @@ export const Widget = ({
         }
     }
 
-    return <div draggable={isActive} onDragStart={(event) => handleOnDrag(event, widgetType)}
+    return <div draggable={isActive && mode === 'constructor'} onDragStart={(event) => handleOnDrag(event, widgetType)}
                 onDoubleClick={handleDoubleClick}
                 className={`widget ${widgetType}-widget${!isActive ? ' disabled' : ''}${isWithShadow && isActive ? ' shadowed' : ''}${getDropHoverClass()}`}>
         {WidgetContent}
