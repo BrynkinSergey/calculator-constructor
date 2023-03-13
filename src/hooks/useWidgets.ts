@@ -3,10 +3,7 @@ import {WidgetType} from "../constants/types";
 
 export const useWidgets = (initState: WidgetType[] = []) => {
     const [widgets, setWidgets] = useState<WidgetType[]>(initState);
-
-    const addLine = (widget: WidgetType) => {
-
-    }
+    
     const addWidget = (widget: WidgetType, nextWidget?: WidgetType) => {
         if (widget === 'display') {
             setWidgets([widget, ...widgets])
