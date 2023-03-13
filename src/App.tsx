@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.scss';
 import {ModeSwitcher} from "./components/ModeSwitcher";
+import {CalculatorConstructor} from "./components/CalculatorConstructor";
 
 function App() {
     return <main className='app'>
@@ -8,10 +9,7 @@ function App() {
             <ModeSwitcher/>
         </div>
         <div className='app__content'>
-            <div className='calculator-constructor'>
-                <div className='calculator-constructor__building-blocks'></div>
-                <div className='calculator-constructor__constructor-field'></div>
-            </div>
+            <CalculatorConstructor/>
         </div>
     </main>
 }

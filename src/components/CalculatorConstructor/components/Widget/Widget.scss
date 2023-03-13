@@ -1,0 +1,59 @@
+@import "src/styles/variables";
+
+@mixin widget($height) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+  height: $height;
+  background-color: $white;
+  gap: 0 8px;
+  border-radius: 4px;
+  position: relative;
+  padding: 4px 0;
+}
+
+@mixin drop-hover {
+  content: url('./images/dropHoverLine.svg');
+  width: 104%;
+  position: absolute;
+}
+
+.widget--drop-hover-before {
+  &:before {
+    @include drop-hover;
+    top: -12px;
+  }
+}
+
+.widget--drop-hover-after {
+  &:after {
+    @include drop-hover;
+    bottom: -7px;
+  }
+}
+
+.display-widget {
+  @include widget(60px);
+}
+
+.operations-widget {
+  @include widget(56px);
+}
+
+.digits-widget {
+  @include widget(224px);
+}
+
+.equal-widget {
+  @include widget(72px);
+}
+
+.disabled {
+  opacity: 50%;
+}
+
+.shadowed {
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.06), 0px 4px 6px rgba(0, 0, 0, 0.1);
+}

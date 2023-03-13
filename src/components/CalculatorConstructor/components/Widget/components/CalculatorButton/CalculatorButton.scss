@@ -1,0 +1,44 @@
+@import "../../../../../../styles/variables";
+
+$heights: 48px, 64px;
+$widths: 52px, 72px, 152px, 232px;
+
+@each $height in $heights {
+  .height-#{$height} {
+    height: $height;
+  }
+}
+
+@each $width in $widths {
+  .width-#{$width} {
+    width: $width;
+  }
+}
+
+.calculator-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 15px;
+  cursor: pointer;
+
+  &_standard {
+    background-color: $white;
+    border: 1px solid $light-gray;
+    color: $black;
+
+    &:hover {
+      border: 2px solid $purple;
+    }
+  }
+
+  &_purple {
+    background-color: $purple;
+    border: 0;
+    color: $white;
+  }
+}

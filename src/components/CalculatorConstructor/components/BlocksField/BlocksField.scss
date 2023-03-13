@@ -1,0 +1,10 @@
+@import "src/styles/variables";
+
+.building-blocks {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  width: 240px;
+  gap: 12px;
+}

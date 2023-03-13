@@ -1,0 +1,1 @@
+export const widgets = ['display', 'operations', 'digits', 'equal'] as const;

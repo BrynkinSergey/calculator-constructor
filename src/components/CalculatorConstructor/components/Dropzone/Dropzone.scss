@@ -1,0 +1,50 @@
+@import "src/styles/variables";
+
+.dropzone {
+  height: 100%;
+  width: 240px;
+  background-color: $white;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+
+  .placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    border: 2px dashed $gray;
+    border-radius: 6px;
+
+    .content {
+      width: 127px;
+      height: 84px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-direction: column;
+    }
+  }
+
+  .dragging {
+    background-color: $sky;
+  }
+
+
+  &__title {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    color: $purple;
+  }
+
+  &__text {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    color: $dark-gray;
+  }
+}

@@ -1,0 +1,9 @@
+@import "src/styles/variables";
+
+.calculator-constructor {
+  width: 540px;
+  height: 450px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
