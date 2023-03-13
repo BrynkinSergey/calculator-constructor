@@ -1,10 +1,12 @@
 import './Widget.scss'
-import {WidgetDropHoverType, WidgetType} from "../../../../constants/types";
+import {OperationsType, WidgetDropHoverType, WidgetType} from "../../../../constants/types";
 import React from "react";
 import {Display} from "./components/Display";
 import {CalculatorButton} from "./components/CalculatorButton";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../../redux/store";
+import {addDigit, calculate, setOperation} from "../../../../redux/calculatorSlice";
+import {digits, operations} from "../../../../constants/constants";
 
 interface WidgetProps {
     dropHover?: WidgetDropHoverType;
@@ -22,10 +24,13 @@ export const Widget = ({
                            onDoubleClick = () => {
                            }
                        }: WidgetProps) => {
-    const operations = ['/', 'x', '-', '+'];
-    const digits = ['7', '8', '9', '4', '5', '6', '1', '2', '3', '0', ','];
-
     const mode = useSelector((state: RootState) => state.calculator.mode)
+    const fistDigit = useSelector((state: RootState) => state.calculator.firstDigit)
+    const secondDigit = useSelector((state: RootState) => state.calculator.secondDigit)
+    const result = useSelector((state: RootState) => state.calculator.result)
+    const displayState = useSelector((state: RootState) => state.calculator.displayState)
+
+    const dispatch = useDispatch();
 
     const handleOnDrag = (event: React.DragEvent, widgetType: WidgetType) => {
         event.dataTransfer.setData('widgetType', widgetType);
@@ -35,16 +40,48 @@ export const Widget = ({
         onDoubleClick(widgetType)
     }
 
+    const handleClick = (value: string) => {
+        console.log(value)
+    }
+
+    const handleClickDigit = (value: string) => {
+        if (mode === 'constructor') return
+        const digit = +value;
+        dispatch(addDigit({digit}));
+    }
+
+    const handleClickOperation = (operation: OperationsType) => {
+        if (mode === 'constructor') return
+        dispatch(setOperation({operation}))
+    }
+
+    const handleClickEqual = () => {
+        if (mode === 'constructor') return
+        dispatch(calculate())
+    }
+
+    const getDisplayValue = () => {
+        switch (displayState) {
+            case 'showFirstDigit':
+                return fistDigit;
+            case 'showSecondDigit':
+                return secondDigit;
+            case 'showResult':
+                return result;
+        }
+    }
+
     let WidgetContent: JSX.Element
 
     switch (widgetType) {
         case "display":
-            WidgetContent = <Display/>
+            WidgetContent = <Display value={getDisplayValue()}/>
             break;
 
         case "operations":
             WidgetContent = <>{operations.map((operation, index) => {
-                return <CalculatorButton key={`operation-button-${index}`} buttonType={'standard'} value={operation}
+                return <CalculatorButton handleOnClick={handleClickOperation} key={`operation-button-${index}`}
+                                         buttonType={'standard'} value={operation}
                                          height={48} width={52}/>
             })}</>
             break;
@@ -54,14 +91,17 @@ export const Widget = ({
                 {digits.map((digit, index) => {
                     let width = 72;
                     if (digit === '0') width = 152
-                    return <CalculatorButton key={`digit-button-${index}`} buttonType={'standard'} value={digit}
+                    return <CalculatorButton handleOnClick={handleClickDigit} key={`digit-button-${index}`}
+                                             buttonType={'standard'} value={digit}
                                              height={48} width={width}/>
                 })}
             </>
             break;
 
         case "equal":
-            WidgetContent = <CalculatorButton buttonType={'purple'} value={'='} height={64} width={232}/>
+            WidgetContent =
+                <CalculatorButton handleOnClick={handleClickEqual} buttonType={'purple'} value={'='} height={64}
+                                  width={232}/>
             break;
 
     }

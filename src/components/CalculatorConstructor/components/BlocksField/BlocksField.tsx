@@ -1,7 +1,7 @@
 import './BlocksField.scss'
 import React from "react";
 import {Widget} from "../Widget";
-import {widgets} from "../../../../constants/widgets";
+import {widgets} from "../../../../constants/constants";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../../redux/store";
 
