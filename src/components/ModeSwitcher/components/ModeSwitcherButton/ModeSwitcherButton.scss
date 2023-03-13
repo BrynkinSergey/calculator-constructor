@@ -8,11 +8,11 @@
   height: 36px;
   width: $width;
   border-radius: 5px;
-  border-width: 0;
   background-color: $light-light-gray;
   font-family: 'Inter', sans-serif;
   font-weight: 500;
   color: $dark-dark-gray;
+  border: 1px solid $light-light-gray;
   cursor: pointer;
 
   &:disabled {
