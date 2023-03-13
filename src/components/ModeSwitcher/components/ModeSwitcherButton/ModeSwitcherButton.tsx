@@ -6,10 +6,6 @@ import {switchMode} from "../../../../redux/calculatorSlice";
 import {capitalizeFirstLetter} from "../../../../utils/capitalizeFirstLetter";
 import {ModeType} from "../../../../constants/types";
 
-interface IconProps {
-    stroke: 'string'
-}
-
 interface ModeSwitcherButtonProps {
     buttonMode: ModeType,
     Icon: React.FunctionComponent<SVGProps<SVGSVGElement> & { title?: string | undefined; }>
