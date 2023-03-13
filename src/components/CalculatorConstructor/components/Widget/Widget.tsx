@@ -40,7 +40,7 @@ export const Widget = ({
 
         case "operations":
             WidgetContent = <>{operations.map((operation, index) => {
-                return <CalculatorButton key={`operation-button-${index}`} style={'standard'} value={operation}
+                return <CalculatorButton key={`operation-button-${index}`} buttonType={'standard'} value={operation}
                                          height={48} width={52}/>
             })}</>
             break;
@@ -50,14 +50,14 @@ export const Widget = ({
                 {digits.map((digit, index) => {
                     let width = 72;
                     if (digit === '0') width = 152
-                    return <CalculatorButton key={`digit-button-${index}`} style={'standard'} value={digit}
+                    return <CalculatorButton key={`digit-button-${index}`} buttonType={'standard'} value={digit}
                                              height={48} width={width}/>
                 })}
             </>
             break;
 
         case "equal":
-            WidgetContent = <CalculatorButton style={'purple'} value={'='} height={64} width={232}/>
+            WidgetContent = <CalculatorButton buttonType={'purple'} value={'='} height={64} width={232}/>
             break;
 
     }
