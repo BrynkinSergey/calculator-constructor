@@ -30,15 +30,17 @@ $widths: 52px, 72px, 152px, 232px;
     background-color: $white;
     border: 1px solid $light-gray;
     color: $black;
-
-    &:hover {
-      border: 2px solid $purple;
-    }
   }
 
   &_purple {
     background-color: $purple;
     border: 0;
     color: $white;
+  }
+}
+
+.hover {
+  &:hover {
+    border: 2px solid $purple;
   }
 }
