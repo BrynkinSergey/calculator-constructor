@@ -16,6 +16,11 @@
     line-height: 43.5px;
     font-weight: 800;
     text-align: right;
+    overflow: scroll;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 }
 

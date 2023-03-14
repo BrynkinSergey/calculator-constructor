@@ -50,8 +50,10 @@ export const calculatorSlice = createSlice({
             const {digit} = action.payload;
             const {displayState, firstDigit, secondDigit} = state
             if (displayState === 'showSecondDigit') {
+                if (state.secondDigit === '0') return
                 state.secondDigit = (secondDigit + digit).toString();
             } else {
+                if (state.firstDigit === '0') return
                 state.firstDigit = (firstDigit + digit).toString();
             }
         },
@@ -85,6 +87,7 @@ export const calculatorSlice = createSlice({
         setDecimalPoint: (state) => {
             if (state.displayState === 'showResult') state.displayState = 'showFirstDigit';
             if (state.displayState === 'showFirstDigit') {
+                if (state.firstDigit.includes('.')) return
                 if (!state.firstDigit) {
                     state.firstDigit = '0.'
                 } else {
@@ -92,6 +95,7 @@ export const calculatorSlice = createSlice({
                 }
             }
             if (state.displayState === 'showSecondDigit') {
+                if (state.secondDigit.includes('.')) return
                 if (!state.secondDigit) {
                     state.secondDigit = '0.'
                 } else {
