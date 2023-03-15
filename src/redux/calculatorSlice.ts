@@ -62,6 +62,7 @@ export const calculatorSlice = createSlice({
             state.currentOperation = action.payload.operation;
         },
         calculate: (state) => {
+            if (state.secondDigit === '') state.secondDigit = state.firstDigit;
             const {currentOperation, firstDigit, secondDigit} = state
             switch (currentOperation) {
                 case '+':
