@@ -11,6 +11,7 @@ export const BlocksField = () => {
     return <div className='building-blocks'>
         {widgets.map((widget, index) => <Widget key={`building-widget-${index}`}
                                                 isActive={availableWidgets.includes(widget)}
+                                                isDraggable={availableWidgets.includes(widget)}
                                                 widgetType={widget}
                                                 isWithShadow={true}/>)}
     </div>

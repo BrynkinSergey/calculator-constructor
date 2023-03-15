@@ -91,7 +91,8 @@ export const Dropzone = () => {
             </div>
         </div>}
         {!!widgets.length && widgets.map((widget, index) => {
-            return <Widget dropHover={getDropHoverForWidget(widget)} onDoubleClick={handleDoubleClick} key={index}
+            return <Widget isDraggable={mode === ModeEnum.Constructor && widget !== WidgetEnum.Display}
+                           dropHover={getDropHoverForWidget(widget)} onDoubleClick={handleDoubleClick} key={index}
                            widgetType={widget}/>
         })}
     </div>

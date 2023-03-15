@@ -21,6 +21,7 @@ interface WidgetProps {
     isActive?: boolean;
     isWithShadow?: boolean;
     onDoubleClick?: (widget: WidgetEnum) => void
+    isDraggable?: boolean;
 }
 
 export const Widget = ({
@@ -28,6 +29,7 @@ export const Widget = ({
                            widgetType,
                            isActive = true,
                            isWithShadow = false,
+                           isDraggable = true,
                            onDoubleClick = () => {
                            }
                        }: WidgetProps) => {
@@ -128,7 +130,8 @@ export const Widget = ({
 
     }
 
-    return <div draggable={isActive && mode === 'constructor'} onDragStart={(event) => handleOnDrag(event, widgetType)}
+    return <div draggable={isDraggable}
+                onDragStart={(event) => handleOnDrag(event, widgetType)}
                 onDoubleClick={handleDoubleClick}
                 className={`widget ${widgetType}-widget${!isActive ? ' disabled' : ''}${isWithShadow && isActive ? ' shadowed' : ''}${getDropHoverClass()}`}>
         {WidgetContent}
