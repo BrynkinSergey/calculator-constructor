@@ -1,7 +1,8 @@
 import React from 'react';
-import './App.scss';
-import {ModeSwitcher} from "./components/ModeSwitcher";
+
 import {CalculatorConstructor} from "./components/CalculatorConstructor";
+import {ModeSwitcher} from "./components/ModeSwitcher";
+import './App.scss';
 
 function App() {
     return <main className='app'>

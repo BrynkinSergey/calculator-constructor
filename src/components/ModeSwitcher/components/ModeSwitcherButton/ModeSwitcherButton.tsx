@@ -4,10 +4,10 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../../redux/store";
 import {switchMode} from "../../../../redux/calculatorSlice";
 import {capitalizeFirstLetter} from "../../../../utils/capitalizeFirstLetter";
-import {ModeType} from "../../../../constants/types";
+import {ModeEnum} from "../../../../constants/enums";
 
 interface ModeSwitcherButtonProps {
-    buttonMode: ModeType,
+    buttonMode: ModeEnum,
     Icon: React.FunctionComponent<SVGProps<SVGSVGElement> & { title?: string | undefined; }>
 }
 

@@ -1,15 +1,15 @@
 import {useState} from "react";
-import {WidgetType} from "../constants/types";
+import {WidgetEnum} from "../constants/enums";
 
-export const useWidgets = (initState: WidgetType[] = []) => {
-    const [widgets, setWidgets] = useState<WidgetType[]>(initState);
+export const useWidgets = (initState: WidgetEnum[] = []) => {
+    const [widgets, setWidgets] = useState<WidgetEnum[]>(initState);
 
-    const addWidget = (widget: WidgetType, nextWidget?: WidgetType) => {
-        if (widget === 'display') {
+    const addWidget = (widget: WidgetEnum, nextWidget?: WidgetEnum) => {
+        if (widget === WidgetEnum.Display) {
             setWidgets([widget, ...widgets])
         } else {
             if (nextWidget) {
-                const nextWidgetIndex = nextWidget === 'display' ? 1 : widgets.indexOf(nextWidget);
+                const nextWidgetIndex = nextWidget === WidgetEnum.Display ? 1 : widgets.indexOf(nextWidget);
                 const updatedWidgets = [...widgets];
                 updatedWidgets.splice(nextWidgetIndex, 0, widget);
                 setWidgets(updatedWidgets)
@@ -19,17 +19,17 @@ export const useWidgets = (initState: WidgetType[] = []) => {
         }
     }
 
-    const removeWidget = (widget: WidgetType) => {
+    const removeWidget = (widget: WidgetEnum) => {
         setWidgets(widgets.filter((current) => current !== widget))
     }
 
-    const replaceWidget = (widget: WidgetType, nextWidget?: WidgetType) => {
+    const replaceWidget = (widget: WidgetEnum, nextWidget?: WidgetEnum) => {
         const updatedWidgets = widgets.filter((current) => current !== widget);
-        if (widget === 'display') {
+        if (widget === WidgetEnum.Display) {
             setWidgets([widget, ...updatedWidgets])
         } else {
             if (nextWidget) {
-                const nextWidgetIndex = nextWidget === 'display' ? 1 : widgets.indexOf(nextWidget);
+                const nextWidgetIndex = nextWidget === WidgetEnum.Display ? 1 : widgets.indexOf(nextWidget);
                 updatedWidgets.splice(nextWidgetIndex, 0, widget);
                 setWidgets(updatedWidgets)
             } else {

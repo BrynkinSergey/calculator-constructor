@@ -1,26 +1,25 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
-import {DisplayStatesType, OperationsType, WidgetType} from "../constants/types";
+import {DisplayStateEnum, ModeEnum, OperationsEnum, WidgetEnum} from "../constants/enums";
 import {widgets} from "../constants/constants";
 
 interface CalculatorState {
-    mode: 'runtime' | 'constructor';
-    availableWidgets: WidgetType[];
+    mode: ModeEnum;
+    availableWidgets: WidgetEnum[];
     firstDigit: string;
     secondDigit: string;
     result: string;
-    displayState: DisplayStatesType;
-    currentOperation: OperationsType;
+    displayState: DisplayStateEnum;
+    currentOperation: OperationsEnum;
 }
 
-
 const initialState: CalculatorState = {
-    mode: 'constructor',
+    mode: ModeEnum.Constructor,
     availableWidgets: [...widgets],
     firstDigit: '',
     secondDigit: '',
     result: '',
-    displayState: 'showFirstDigit',
-    currentOperation: null,
+    displayState: DisplayStateEnum.ShowFirstDigit,
+    currentOperation: OperationsEnum.Empty,
 }
 
 export const calculatorSlice = createSlice({
@@ -28,12 +27,12 @@ export const calculatorSlice = createSlice({
     initialState,
     reducers: {
         switchMode: (state) => {
-            state.mode = state.mode === 'runtime' ? 'constructor' : 'runtime';
+            state.mode = state.mode === ModeEnum.Runtime ? ModeEnum.Constructor : ModeEnum.Runtime;
             state.firstDigit = '';
             state.secondDigit = '';
             state.result = '';
-            state.displayState = 'showFirstDigit';
-            state.currentOperation = null;
+            state.displayState = DisplayStateEnum.ShowFirstDigit;
+            state.currentOperation = OperationsEnum.Empty;
         },
         addAvailableWidget: (state, action) => {
             const index = state.availableWidgets.indexOf(action.payload);
@@ -45,11 +44,11 @@ export const calculatorSlice = createSlice({
             if (index > -1) state.availableWidgets.splice(index, 1);
         },
         addDigit: (state, action: PayloadAction<{ digit: number }>) => {
-            if (state.displayState === 'showResult') state.displayState = 'showFirstDigit';
-            if (state.currentOperation) state.displayState = 'showSecondDigit';
+            if (state.displayState === DisplayStateEnum.ShowResult) state.displayState = DisplayStateEnum.ShowFirstDigit;
+            if (state.currentOperation !== OperationsEnum.Empty) state.displayState = DisplayStateEnum.ShowSecondDigit;
             const {digit} = action.payload;
             const {displayState, firstDigit, secondDigit} = state
-            if (displayState === 'showSecondDigit') {
+            if (displayState === DisplayStateEnum.ShowSecondDigit) {
                 if (state.secondDigit === '0') return
                 state.secondDigit = (secondDigit + digit).toString();
             } else {
@@ -57,24 +56,24 @@ export const calculatorSlice = createSlice({
                 state.firstDigit = (firstDigit + digit).toString();
             }
         },
-        setOperation: (state, action: PayloadAction<{ operation: OperationsType }>) => {
-            if (state.displayState === 'showResult') state.firstDigit = state.result;
+        setOperation: (state, action: PayloadAction<{ operation: OperationsEnum }>) => {
+            if (state.displayState === DisplayStateEnum.ShowResult) state.firstDigit = state.result;
             state.currentOperation = action.payload.operation;
         },
         calculate: (state) => {
             if (state.secondDigit === '') state.secondDigit = state.firstDigit;
             const {currentOperation, firstDigit, secondDigit} = state
             switch (currentOperation) {
-                case '+':
+                case OperationsEnum.Adding:
                     state.result = (+firstDigit + +secondDigit).toString();
                     break;
-                case '-':
+                case OperationsEnum.Subtraction:
                     state.result = (+firstDigit - +secondDigit).toString();
                     break;
-                case 'x':
+                case OperationsEnum.Multiplication:
                     state.result = (+firstDigit * +secondDigit).toString();
                     break;
-                case '/':
+                case OperationsEnum.Division:
                     state.result = (+firstDigit / +secondDigit).toString();
                     break;
             }
@@ -82,12 +81,12 @@ export const calculatorSlice = createSlice({
             if (!Number.isFinite(+state.result)) state.result = 'Не определено';
             state.firstDigit = '';
             state.secondDigit = '';
-            state.currentOperation = null;
-            state.displayState = 'showResult'
+            state.currentOperation = OperationsEnum.Empty;
+            state.displayState = DisplayStateEnum.ShowResult
         },
         setDecimalPoint: (state) => {
-            if (state.displayState === 'showResult') state.displayState = 'showFirstDigit';
-            if (state.displayState === 'showFirstDigit') {
+            if (state.displayState === DisplayStateEnum.ShowResult) state.displayState = DisplayStateEnum.ShowFirstDigit;
+            if (state.displayState === DisplayStateEnum.ShowFirstDigit) {
                 if (state.firstDigit.includes('.')) return
                 if (!state.firstDigit) {
                     state.firstDigit = '0.'
@@ -95,7 +94,7 @@ export const calculatorSlice = createSlice({
                     state.firstDigit = state.firstDigit + '.'
                 }
             }
-            if (state.displayState === 'showSecondDigit') {
+            if (state.displayState === DisplayStateEnum.ShowSecondDigit) {
                 if (state.secondDigit.includes('.')) return
                 if (!state.secondDigit) {
                     state.secondDigit = '0.'

@@ -1,10 +1,10 @@
-import './CalculatorButton.scss'
-import {CalculatorButtonType} from "../../../../../../constants/types";
+import './CalculatorButton.scss';
 import {useSelector} from "react-redux";
 import {RootState} from "../../../../../../redux/store";
+import {CalculatorButtonEnum} from "../../../../../../constants/enums";
 
 interface CalculatorButtonProps {
-    buttonType: CalculatorButtonType;
+    buttonType: CalculatorButtonEnum;
     value: string;
     height: number;
     width: number;
