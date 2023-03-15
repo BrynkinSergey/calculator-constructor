@@ -9,15 +9,17 @@ interface CalculatorButtonProps {
     height: number;
     width: number;
     //todo remove any
-    handleOnClick: (value: any) => void;
+    onClick: (value: any) => void;
 }
 
-export const CalculatorButton = ({handleOnClick, buttonType, value, height, width}: CalculatorButtonProps) => {
+export const CalculatorButton = ({onClick, buttonType, value, height, width}: CalculatorButtonProps) => {
     const mode = useSelector((state: RootState) => state.calculator.mode)
 
-    return <button onClick={() => {
-        handleOnClick(value)
-    }}
+    const handleClick = () => {
+        onClick(value)
+    }
+
+    return <button onClick={handleClick}
                    className={`calculator-button calculator-button_${buttonType}${mode === 'runtime' ? ' hover' : ''} height-${height}px width-${width}px`}>
         <div>{value}</div>
     </button>

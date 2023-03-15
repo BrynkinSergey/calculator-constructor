@@ -8,11 +8,13 @@ import {useWidgets} from "../../../../hooks/useWidgets";
 import {WIDGET_CLASS} from "./Dropzone.consts";
 import {RootState} from "../../../../redux/store";
 import {DropHoverWidgetEnum, ModeEnum, WidgetDropPlaceEnum, WidgetEnum} from "../../../../constants/enums";
+import {getWidgetClassName} from "../../../../utils/getWidgetClassName";
 
 export const Dropzone = () => {
     const [isDragging, setIsDragging] = useState(false)
     const [dropHoveredWidget, setDropHoveredWidget] = useState<DropHoverWidgetEnum>(DropHoverWidgetEnum.Null)
     const {widgets, addWidget, removeWidget, replaceWidget} = useWidgets()
+
     const mode = useSelector((state: RootState) => state.calculator.mode)
     const dispatch = useDispatch();
 
@@ -24,11 +26,10 @@ export const Dropzone = () => {
     }
 
     const handleOnDrop = (event: React.DragEvent) => {
-        const target = event.target as HTMLDivElement;
         const widget = event.dataTransfer.getData('widgetType') as WidgetEnum;
 
-        if (target.closest(`.${WIDGET_CLASS}`)?.className.includes(WIDGET_CLASS)) {
-            const nextWidget = target.closest(`.${WIDGET_CLASS}`)?.className.split(' ')[1].split('-')[0] as WidgetEnum;
+        if (getWidgetClassName(event).includes(WIDGET_CLASS)) {
+            const nextWidget = getWidgetClassName(event).split(' ')[1].split('-')[0] as WidgetEnum;
             if (widgets.includes(widget)) {
                 replaceWidget(widget, nextWidget)
             } else {
@@ -47,11 +48,10 @@ export const Dropzone = () => {
 
     const handleDragOver = (event: React.DragEvent) => {
         event.preventDefault();
-        const target = event.target as HTMLDivElement;
         const widgetType = event.dataTransfer.getData('widgetType') as WidgetEnum;
 
-        if (target.closest(`.${WIDGET_CLASS}`)?.className.includes(WIDGET_CLASS)) {
-            const nextWidgetType = target.closest(`.${WIDGET_CLASS}`)?.className.split(' ')[1].split('-')[0] as DropHoverWidgetEnum;
+        if (getWidgetClassName(event).includes(WIDGET_CLASS)) {
+            const nextWidgetType = getWidgetClassName(event).split(' ')[1].split('-')[0] as DropHoverWidgetEnum;
             if (!widgets.includes(widgetType)) {
                 setDropHoveredWidget(nextWidgetType)
             }
@@ -63,6 +63,7 @@ export const Dropzone = () => {
         }
 
     }
+
     const handleDragEnter = (event: React.DragEvent) => setIsDragging(true);
     const handleDragLeave = (event: React.DragEvent) => {
         setIsDragging(false);

@@ -39,84 +39,6 @@ export const Widget = ({
 
     const dispatch = useDispatch();
 
-    const handleOnDrag = (event: React.DragEvent, widgetType: WidgetEnum) => {
-        event.dataTransfer.setData('widgetType', widgetType);
-    }
-
-    const handleDoubleClick = () => {
-        onDoubleClick(widgetType)
-    }
-
-    const handleClickDigit = (value: string) => {
-        if (mode === ModeEnum.Constructor) return
-        const digit = +value;
-        dispatch(addDigit({digit}));
-    }
-
-    const handleClickOperation = (operation: OperationsEnum) => {
-        if (mode === ModeEnum.Constructor) return
-        dispatch(setOperation({operation}))
-    }
-
-    const handleClickEqual = () => {
-        if (mode === ModeEnum.Constructor) return
-        dispatch(calculate())
-    }
-
-    const handleClickColon = () => {
-        if (mode === ModeEnum.Constructor) return
-        dispatch(setDecimalPoint())
-    }
-
-    const getDisplayValue = () => {
-        switch (displayState) {
-            case DisplayStateEnum.ShowFirstDigit:
-                return fistDigit;
-            case DisplayStateEnum.ShowSecondDigit:
-                return secondDigit;
-            case DisplayStateEnum.ShowResult:
-                return result;
-        }
-    }
-
-    let WidgetContent: JSX.Element
-
-    switch (widgetType) {
-        case WidgetEnum.Display:
-            WidgetContent = <Display value={getDisplayValue().toString()}/>
-            break;
-
-        case WidgetEnum.Operations:
-            WidgetContent = <>{operations.map((operation, index) => {
-                if (operation === OperationsEnum.Empty) return null;
-                return <CalculatorButton handleOnClick={handleClickOperation} key={`operation-button-${index}`}
-                                         buttonType={CalculatorButtonEnum.Standard} value={operation}
-                                         height={48} width={52}/>
-            })}</>
-            break;
-
-        case WidgetEnum.Digits:
-            WidgetContent = <>
-                {digits.map((digit, index) => {
-                    let width = 72;
-                    if (digit === '0') width = 152
-                    return <CalculatorButton handleOnClick={digit === ',' ? handleClickColon : handleClickDigit}
-                                             key={`digit-button-${index}`}
-                                             buttonType={CalculatorButtonEnum.Standard} value={digit}
-                                             height={48} width={width}/>
-                })}
-            </>
-            break;
-
-        case WidgetEnum.Equal:
-            WidgetContent =
-                <CalculatorButton handleOnClick={handleClickEqual} buttonType={CalculatorButtonEnum.Purple} value={'='}
-                                  height={64}
-                                  width={232}/>
-            break;
-
-    }
-
     const getDropHoverClass = () => {
         switch (dropHover) {
             case WidgetDropPlaceEnum.Top:
@@ -126,6 +48,84 @@ export const Widget = ({
             default:
                 return '';
         }
+    }
+
+    const handleOnDrag = (event: React.DragEvent, widgetType: WidgetEnum) => {
+        event.dataTransfer.setData('widgetType', widgetType);
+    }
+
+    const handleDoubleClick = () => {
+        onDoubleClick(widgetType)
+    }
+
+    let WidgetContent: JSX.Element
+
+    switch (widgetType) {
+        case WidgetEnum.Display:
+            const getDisplayValue = () => {
+                switch (displayState) {
+                    case DisplayStateEnum.ShowFirstDigit:
+                        return fistDigit;
+                    case DisplayStateEnum.ShowSecondDigit:
+                        return secondDigit;
+                    case DisplayStateEnum.ShowResult:
+                        return result;
+                }
+            }
+
+            WidgetContent = <Display value={getDisplayValue().toString()}/>
+            break;
+
+        case WidgetEnum.Operations:
+            const handleClickOperation = (operation: OperationsEnum) => {
+                if (mode === ModeEnum.Constructor) return
+                dispatch(setOperation({operation}))
+            }
+
+            WidgetContent = <>{operations.map((operation, index) => {
+                if (operation === OperationsEnum.Empty) return null;
+                return <CalculatorButton onClick={handleClickOperation} key={`operation-button-${index}`}
+                                         buttonType={CalculatorButtonEnum.Standard} value={operation}
+                                         height={48} width={52}/>
+            })}</>
+            break;
+
+        case WidgetEnum.Digits:
+            const handleClickColon = () => {
+                if (mode === ModeEnum.Constructor) return
+                dispatch(setDecimalPoint())
+            }
+
+            const handleClickDigit = (value: string) => {
+                if (mode === ModeEnum.Constructor) return
+                const digit = +value;
+                dispatch(addDigit({digit}));
+            }
+
+            WidgetContent = <>
+                {digits.map((digit, index) => {
+                    let width = 72;
+                    if (digit === '0') width = 152
+                    return <CalculatorButton onClick={digit === ',' ? handleClickColon : handleClickDigit}
+                                             key={`digit-button-${index}`}
+                                             buttonType={CalculatorButtonEnum.Standard} value={digit}
+                                             height={48} width={width}/>
+                })}
+            </>
+            break;
+
+        case WidgetEnum.Equal:
+            const handleClickEqual = () => {
+                if (mode === ModeEnum.Constructor) return
+                dispatch(calculate())
+            }
+
+            WidgetContent =
+                <CalculatorButton onClick={handleClickEqual} buttonType={CalculatorButtonEnum.Purple} value={'='}
+                                  height={64}
+                                  width={232}/>
+            break;
+
     }
 
     return <div draggable={isActive && mode === 'constructor'} onDragStart={(event) => handleOnDrag(event, widgetType)}
