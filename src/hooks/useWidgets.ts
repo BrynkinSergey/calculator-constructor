@@ -29,7 +29,10 @@ export const useWidgets = (initState: WidgetEnum[] = []) => {
             setWidgets([widget, ...updatedWidgets])
         } else {
             if (nextWidget) {
-                const nextWidgetIndex = nextWidget === WidgetEnum.Display ? 1 : widgets.indexOf(nextWidget);
+                const nextWidgetIndex = nextWidget === WidgetEnum.Display ? 1 :
+                    widget === nextWidget ? widgets.indexOf(widget) :
+                        updatedWidgets.indexOf(nextWidget);
+
                 updatedWidgets.splice(nextWidgetIndex, 0, widget);
                 setWidgets(updatedWidgets)
             } else {
