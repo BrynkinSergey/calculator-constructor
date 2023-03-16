@@ -35,6 +35,7 @@ export const calculatorSlice = createSlice({
             state.result = '';
             state.displayState = DisplayStateEnum.ShowFirstDigit;
             state.currentOperation = OperationsEnum.Empty;
+            state.cashOperation = OperationsEnum.Empty;
         },
         addAvailableWidget: (state, action) => {
             const index = state.availableWidgets.indexOf(action.payload);
