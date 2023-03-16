@@ -64,18 +64,23 @@ export const Widget = ({
 
     switch (widgetType) {
         case WidgetEnum.Display:
-            const getDisplayValue = () => {
+            const getDisplayValue = (): string => {
+                let displayValue: string;
                 switch (displayState) {
                     case DisplayStateEnum.ShowFirstDigit:
-                        return fistDigit;
+                        displayValue = fistDigit;
+                        break;
                     case DisplayStateEnum.ShowSecondDigit:
-                        return secondDigit;
+                        displayValue = secondDigit;
+                        break;
                     case DisplayStateEnum.ShowResult:
-                        return result;
+                        displayValue = result;
+                        break;
                 }
+                return displayValue === '' ? '0' : displayValue?.split('.').join(',');
             }
 
-            WidgetContent = <Display value={getDisplayValue().toString()}/>
+            WidgetContent = <Display value={getDisplayValue()}/>
             break;
 
         case WidgetEnum.Operations:
