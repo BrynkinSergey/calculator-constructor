@@ -7,6 +7,7 @@ interface CalculatorState {
     availableWidgets: WidgetEnum[];
     firstDigit: string;
     secondDigit: string;
+    cashSecondDigit: string;
     result: string;
     displayState: DisplayStateEnum;
     currentOperation: OperationsEnum;
@@ -18,6 +19,7 @@ const initialState: CalculatorState = {
     availableWidgets: [...widgets],
     firstDigit: '',
     secondDigit: '',
+    cashSecondDigit: '',
     result: '',
     displayState: DisplayStateEnum.ShowFirstDigit,
     currentOperation: OperationsEnum.Empty,
@@ -77,7 +79,9 @@ export const calculatorSlice = createSlice({
 
         calculate: (state) => {
             if (state.displayState === DisplayStateEnum.ShowResult) state.firstDigit = state.result;
-            if (state.secondDigit === '') state.secondDigit = state.firstDigit;
+            if (state.secondDigit === '') {
+                state.secondDigit = state.cashSecondDigit === '' ? state.firstDigit : state.cashSecondDigit;
+            }
             if (state.currentOperation === OperationsEnum.Empty) state.currentOperation = state.cashOperation;
 
             const currentOperation = state.currentOperation;
@@ -101,9 +105,10 @@ export const calculatorSlice = createSlice({
                     state.result = firstDigit.toString();
             }
 
-            state.result = (+state.result.split('.')[1] > 15 ? (+state.result).toFixed(15) : state.result).toString()
+            state.result = (Math.round(+state.result * 1e15) / 1e15).toString()
             if (!Number.isFinite(+state.result)) state.result = 'Не определено';
             state.firstDigit = '';
+            state.cashSecondDigit = state.secondDigit;
             state.secondDigit = '';
             state.currentOperation = OperationsEnum.Empty;
             state.displayState = DisplayStateEnum.ShowResult
