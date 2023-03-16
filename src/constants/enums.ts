@@ -25,10 +25,10 @@ export enum DropHoverWidgetEnum {
 }
 
 export enum OperationsEnum {
-    Adding = '+',
-    Subtraction = '-',
-    Multiplication = 'x',
     Division = '/',
+    Multiplication = 'x',
+    Subtraction = '-',
+    Adding = '+',
     Empty = 'empty',
 }
 
