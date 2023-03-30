@@ -85,8 +85,10 @@ export const calculatorSlice = createSlice({
             if (state.currentOperation === OperationsEnum.Empty) state.currentOperation = state.cashOperation;
 
             const currentOperation = state.currentOperation;
-            const firstDigit = +state.firstDigit;
-            const secondDigit = +state.secondDigit;
+            const fractionalPartLength = Math.max(state.firstDigit.split('.')[1]?.length || 0, state.secondDigit.split('.')[1]?.length || 0);
+            const multiplier = Math.pow(10, fractionalPartLength ? fractionalPartLength : 0);
+            const firstDigit = +state.firstDigit * multiplier;
+            const secondDigit = +state.secondDigit * multiplier;
 
             switch (currentOperation) {
                 case OperationsEnum.Adding:
@@ -105,7 +107,7 @@ export const calculatorSlice = createSlice({
                     state.result = firstDigit.toString();
             }
 
-            state.result = (Math.round(+state.result * 1e15) / 1e15).toString()
+            state.result = ((Math.round(+state.result * 1e15) / 1e15) / multiplier).toString()
             if (!Number.isFinite(+state.result)) state.result = 'Не определено';
             state.firstDigit = '';
             state.cashSecondDigit = state.secondDigit;
